@@ -260,6 +260,11 @@ public:
   static void SetExtraLogLevels(int level);
   static bool IsLogLevelLogged(int loglevel);
 
+#ifdef WIN32
+  static std::string GBKToUTF8(const char* strGBK);
+  static std::string UTF8ToGBK(const char* strUTF8);
+#endif  //WIN32
+
 protected:
   class CLogGlobals
   {
@@ -291,13 +296,13 @@ protected:
 #define log_fatal(format, ...)
 #else
 #ifdef NDEBUG
-#define log_debug(format, ...)   CLog::Log(LOGDEBUG, (format), ##__VA_ARGS__)
-#define log_info(format, ...)    CLog::Log(LOGINFO, (format), ##__VA_ARGS__)
-#define log_notice(format, ...)  CLog::Log(LOGNOTICE, (format), ##__VA_ARGS__)
-#define log_warning(format, ...) CLog::Log(LOGWARNING, (format), ##__VA_ARGS__)
-#define log_error(format, ...)   CLog::Log(LOGERROR, (format), ##__VA_ARGS__)
-#define log_severe(format, ...)  CLog::Log(LOGSEVERE, (format), ##__VA_ARGS__)
-#define log_fatal(format, ...)   CLog::Log(LOGFATAL, (format), ##__VA_ARGS__)
+#define log_debug(format, ...)   CLog::Log(LOGDEBUG,   "[%04d]" format, __LINE__, ##__VA_ARGS__)
+#define log_info(format, ...)    CLog::Log(LOGINFO,    "[%04d]" format, __LINE__, ##__VA_ARGS__)
+#define log_notice(format, ...)  CLog::Log(LOGNOTICE,  "[%04d]" format, __LINE__, ##__VA_ARGS__)
+#define log_warning(format, ...) CLog::Log(LOGWARNING, "[%04d]" format, __LINE__, ##__VA_ARGS__)
+#define log_error(format, ...)   CLog::Log(LOGERROR,   "[%04d]" format, __LINE__, ##__VA_ARGS__)
+#define log_severe(format, ...)  CLog::Log(LOGSEVERE,  "[%04d]" format, __LINE__, ##__VA_ARGS__)
+#define log_fatal(format, ...)   CLog::Log(LOGFATAL,   "[%04d]" format, __LINE__, ##__VA_ARGS__)
 #else
 #define log_debug(format, ...) \
     CLog::Log(LOGDEBUG, "[%s][%d]" format, __FILE__, __LINE__, ##__VA_ARGS__ )
